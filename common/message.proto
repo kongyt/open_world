@@ -1,0 +1,76 @@
+syntax="proto2";
+package civilization;
+option java_package="com.kongyt.civilization.messages";
+
+
+// 消息定义规范
+// 前两个字节为模块ID
+// 后两个字节为具体消息ID
+
+enum Msg
+{
+  None_Msg			= 0x00000000;
+
+  // 注册用户
+  Register_Req			= 0x00010001;
+  Register_Res			= 0x00010002;
+
+
+  // 登陆
+  Login_Req			= 0x00010003;
+  Login_Res			= 0x00010004;
+
+
+  // 断线重连
+  Reconnect_Req			= 0x00010005;
+  Reconnect_Res			= 0x00010006;
+}
+
+
+message Request{
+  // 包含所有的Request消息
+  optional RegisterReq	registerReq	= 1;
+  optional LoginReq	loginReq	= 2;
+  optional ReconnectReq	reconnectReq	= 3;
+}
+
+
+message Response{
+  required bool result			= 1;	// true表示成功，false表示失败
+  required bool lastResponse		= 2;	// 一个请求可以包含多个应答，用于指示是否是最后一个
+  optional string errorDescribe		= 3;    // result为false时，描述错误信息
+
+  // 包含所有的Response消息
+  optional RegisterRes registerRes	= 4;
+  optional LoginRes    loginRes		= 5;
+  optional ReconnectRes reconnectRes	= 6;
+}
+
+message RegisterReq{
+  // 空消息
+}
+
+message RegisterRes{
+  required string uuid			= 1;    // 服务器返回一个唯一标识uuid
+  required string name			= 2;    // 服务器返回一个默认名字
+}
+
+
+message LoginReq{
+  required string uuid			= 1;	// 注册时获取的uuid
+}
+
+message LoginRes{
+  // 空消息
+}
+
+
+message ReconnectReq{
+  required string uuid			= 1;	// 注册时获取的uuid
+}
+
+message ReconnectRes{
+  // 空消息
+}
+
+
